@@ -1,0 +1,63 @@
+[
+  {
+    "id": "asics-novablast5",
+    "name": "ASICS NOVABLAST 5",
+    "badge": "HOT",
+    "image": "https://i.imgur.com/monDPvr.png",
+    "colors": [
+      { "name": "Putih Sulam", "img": "https://i.imgur.com/monDPvr.png", "stockPerSize": {} },
+      { "name": "Light Mint", "img": "https://i.imgur.com/URBw5cT.png", "stockPerSize": {} },
+      { "name": "Hitam Biru", "img": "https://i.imgur.com/SAtylPM.png", "stockPerSize": {} },
+      { "name": "Kelabu Hijau", "img": "https://i.imgur.com/I0gmxSv.png", "stockPerSize": {} },
+      { "name": "Putih Biru gelap", "img": "https://i.imgur.com/fMi711V.png", "stockPerSize": {} },
+      { "name": "Purple Orange Gelap", "img": "https://i.imgur.com/4TneYtx.png", "stockPerSize": {} },
+      { "name": "Biru Kuning", "img": "https://i.imgur.com/E3KpL3J.png", "stockPerSize": {} },
+      { "name": "Hijau Sulam", "img": "https://i.imgur.com/ikSvxpZ.png", "stockPerSize": {} },
+      { "name": "Hitam Gold", "img": "https://i.imgur.com/Zu5E6do.png", "stockPerSize": {} },
+      { "name": "Purple Orange", "img": "https://i.imgur.com/eULKMLc.png", "stockPerSize": {} },
+      { "name": "Biru Putih", "img": "https://i.imgur.com/biFc9aZ.png", "stockPerSize": {} },
+      { "name": "Putih Merah", "img": "https://i.imgur.com/3nKv83W.png", "stockPerSize": {} },
+      { "name": "Mint Oren", "img": "https://i.imgur.com/Fg9jUaf.png", "stockPerSize": {} },
+      { "name": "Hitam", "img": "https://i.imgur.com/5yYPbKK.png", "stockPerSize": {} },
+      { "name": "Hitam Merah", "img": "https://i.imgur.com/UUl9bzB.png", "stockPerSize": {} }
+    ],
+    "sizes": [
+      "25CM 6½UK",
+      "26CM 7UK",
+      "26½CM 7½UK",
+      "27½CM 8½UK",
+      "28CM 9UK",
+      "28½CM 10UK"
+    ],
+    "price": 96
+  },
+  {
+    "id": "adidas-adizero-evo-sl",
+    "name": "ADIDAS ADIZERO EVO SL",
+    "badge": "NEW",
+    "image": "https://i.imgur.com/4eWqWGw.png",
+    "colors": [
+      { "name": "Hijau Hitam", "img": "https://i.imgur.com/4eWqWGw.png", "stockPerSize": {} },
+      { "name": "Biru Silver", "img": "https://i.imgur.com/TczNSlq.png", "stockPerSize": {} },
+      { "name": "Silver", "img": "https://i.imgur.com/tkZk0tY.png", "stockPerSize": {} },
+      { "name": "Cream Silver", "img": "https://i.imgur.com/i2PXTWu.png", "stockPerSize": {} },
+      { "name": "Putih Hijau", "img": "https://i.imgur.com/qmp6ZuJ.png", "stockPerSize": {} },
+      { "name": "Putih Merah", "img": "https://i.imgur.com/fi742VA.png", "stockPerSize": {} },
+      { "name": "Putih Hitam", "img": "https://i.imgur.com/1OmLI3n.png", "stockPerSize": {} },
+      { "name": "Hitam Oren", "img": "https://i.imgur.com/VUPs6jA.png", "stockPerSize": {} },
+      { "name": "Hitam Putih", "img": "https://i.imgur.com/8Msarbe.png", "stockPerSize": {} },
+      { "name": "Hitam Silver", "img": "https://i.imgur.com/9kE9dpm.png", "stockPerSize": {} }
+    ],
+    "sizes": [
+      "23½CM 5UK 38EU",
+      "24CM 6UK 39EU",
+      "24.5CM 6½UK 40EU",
+      "25½CM 7½UK 41EU",
+      "26CM 8UK 42EU",
+      "26½CM 9UK 43EU",
+      "27CM 9½UK 44EU",
+      "28CM 10½ 45EU"
+    ],
+    "price": 110
+  }
+]
