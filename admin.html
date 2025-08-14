@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PKB Admin — Login Protected</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    /* gaya asal awak kekalkan */
+    :root{--bg1:#0f1020; --bg2:#101629; --glass: rgba(255,255,255,.07);
+      --stroke: rgba(255,255,255,.12); --text: #E6E9EF; --muted:#AAB0BC;
+      --brand1:#7C3AED; --brand2:#06B6D4; --ok:#22C55E; --err:#EF4444;}
+    body{font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      margin:0;min-height:100vh;color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% -10%, #1a1447 0%, transparent 60%),
+        radial-gradient(900px 400px at 110% 10%, #003e54 0%, transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+    }
+    .hidden{display:none;}
+    .head{position:sticky;top:0;padding:18px 16px;background:linear-gradient(90deg, rgba(124,58,237,.35), rgba(6,182,212,.35));
+      backdrop-filter:blur(6px);border-bottom:1px solid var(--stroke);display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{font-weight:800;display:flex;align-items:center;gap:10px}
+    .container{max-width:980px;margin:0 auto;padding:16px}
+    .glass{background:var(--glass);border:1px solid var(--stroke);border-radius:16px;padding:14px;backdrop-filter:blur(10px);box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    .toolbar{display:grid;gap:12px;grid-template-columns:repeat(2,1fr)}
+    @media(min-width:950px){ .toolbar{grid-template-columns:repeat(3,1fr)} }
+    .btn{cursor:pointer;border-radius:14px;padding:14px;font-weight:700;border:1px solid var(--stroke);
+      display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg, rgba(124,58,237,.25), rgba(6,182,212,.25));transition:.14s}
+    .btn:hover{transform:translateY(-2px);filter:brightness(1.06)}
+    .btn.ok{background:linear-gradient(135deg, rgba(34,197,94,.25), rgba(6,182,212,.12))}
+    .btn.err{background:linear-gradient(135deg, rgba(239,68,68,.25), rgba(124,58,237,.08))}
+    .status{color:var(--muted);font-size:13px;margin-top:8px}
+    .code{margin-top:12px;background:rgba(0,0,0,.35);border:1px solid var(--stroke);border-radius:12px;padding:12px;color:#E6E9EF;font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;white-space:pre-wrap;max-height:50vh;overflow:auto}
+    .foot{color:var(--muted);text-align:center;padding:16px 10px;font-size:12px}
+  </style>
+</head>
+<body>
+
+<div id="adminPanel" class="hidden">
+  <div class="head">
+    <div class="brand"><span style="font-size:22px">🛠️</span> PKB Admin</div>
+    <div style="font-size:13px;color:var(--muted)">Keep this link private</div>
+  </div>
+
+  <div class="container">
+    <div class="glass">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
+        <div>
+          <div style="font-weight:800">Status</div>
+          <div id="status" class="status">Siap — automatik terbenam (no login)</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn" id="btnSettings" title="Tukar GitHub settings">⚙️ Settings</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="glass">
+      <div style="font-weight:800;margin-bottom:10px">Actions</div>
+      <div class="toolbar">
+        <button class="btn" id="btnLoad">🔄 Muat Produk</button>
+        <button class="btn ok" id="btnSave">💾 Simpan ke GitHub</button>
+        <button class="btn" id="btnAdd">➕ Tambah Produk</button>
+        <button class="btn" id="btnEditPrice">💲 Tukar Harga</button>
+        <button class="btn" id="btnEditSizes">📏 Set Saiz</button>
+        <button class="btn" id="btnAddColor">🎨 Tambah Warna</button>
+        <button class="btn" id="btnEditMeta">🖼️ Nama/Badge/Gambar</button>
+        <button class="btn err" id="btnDelete">🗑️ Padam Produk</button>
+      </div>
+      <div class="status">Tip: Tekan <b>Muat Produk</b> dahulu → buat perubahan → tekan <b>Simpan ke GitHub</b>.</div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="glass">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-weight:800">Preview Data</div>
+        <div style="display:flex;gap:8px">
+          <button class="btn" id="btnPrettify" style="padding:8px 12px">✨ Prettify</button>
+          <button class="btn" id="btnRefreshView" style="padding:8px 12px">🔁 Refresh</button>
+        </div>
+      </div>
+      <div id="preview" class="code">[]</div>
+    </div>
+
+    <div style="height:10px"></div>
+    <div class="foot">© PKB — Rahsiakan link ini</div>
+  </div>
+</div>
+
+<script>
+const adminUsers = [
+  { user: "PKBADMIN", pass: "PKB12345" }
+];
+
+async function showLogin() {
+  const { value: formValues } = await Swal.fire({
+    title: 'Login Admin',
+    html:
+      '<input id="swal-user" class="swal2-input" placeholder="Username">' +
+      '<input id="swal-pass" type="password" class="swal2-input" placeholder="Password">',
+    focusConfirm: false,
+    preConfirm: () => {
+      return {
+        u: document.getElementById('swal-user').value.trim(),
+        p: document.getElementById('swal-pass').value.trim()
+      };
+    }
+  });
+
+  if (!formValues) return showLogin();
+  const found = adminUsers.some(a => a.user === formValues.u && a.pass === formValues.p);
+  if (!found) {
+    await Swal.fire('Gagal', 'Username atau password salah!', 'error');
+    return showLogin();
+  }
+
+  document.getElementById('adminPanel').classList.remove('hidden');
+  Swal.fire('Berjaya', 'Selamat datang, ' + formValues.u, 'success');
+}
+showLogin();
+
+let products = [];
+const el = id => document.getElementById(id);
+const refreshView = (pretty=true) => el("preview").innerText = pretty ? JSON.stringify(products, null, 2) : JSON.stringify(products);
+
+document.getElementById('btnLoad').onclick = async () => {
+  const r = await fetch('/products.json?_=' + Date.now());
+  products = await r.json();
+  refreshView();
+};
+
+document.getElementById('btnPrettify').onclick = () => refreshView(true);
+document.getElementById('btnRefreshView').onclick = () => refreshView();
+
+document.getElementById('btnSave').onclick = async () => {
+  if (!products.length) return Swal.fire('Tiada Data','Muat produk dahulu.','info');
+  const res = await fetch('/api/save-products', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(products)
+  }).then(r=>r.json());
+  if (res.success) {
+    Swal.fire('Berjaya','products.json dikemaskini.','success');
+  } else {
+    Swal.fire('Gagal', res.message || 'Gagal simpan.', 'error');
+  }
+};
+</script>
+</body>
+  </html>
