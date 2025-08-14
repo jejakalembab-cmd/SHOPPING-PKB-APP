@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Preloved Kids Boutique — Live Order (Variants)</title>
+
+<!-- Font -->
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&display=swap" rel="stylesheet">
+
+<!-- Font Awesome for TikTok Icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+  :root{
+    --brand-yellow: #FFD600;
+    --brand-red: #E92E2E;
+    --brand-blue: #3CB4E5;
+    --text-dark: #111;
+    --card-bg: #fff;
+    --page-bg: #fff7d6;
+    --shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+  *{box-sizing:border-box}
+  body{
+    font-family: "Baloo 2", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background:var(--page-bg);
+    margin:0;color:var(--text-dark);
+    -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  }
+  header.app-header{
+    background: linear-gradient(90deg,var(--brand-yellow),var(--brand-red) 60%,var(--brand-blue));
+    color:#fff;padding:14px 16px;display:flex;align-items:center;gap:12px;
+    position:sticky;top:0;z-index:40;box-shadow: var(--shadow);
+  }
+  header .logo{
+  height:56px;
+  width:56px;
+  border-radius:10px;
+  background:transparent; /* tiada border putih */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+header .logo img{
+  width:100%;
+  height:100%;
+  object-fit:contain; /* isi ruang tanpa crop */
+  display:block;
+}
+
+@media(max-width:480px){
+  header .logo{
+    height:100px;
+    width:100px;
+  }
+}
+  header h1{font-size:18px;margin:0 0 0 4px;font-weight:800;letter-spacing:0.2px}
+  header p{margin:0;font-size:12px;opacity:0.95}
+
+  .wrap{display:grid;grid-template-columns: 1fr 360px;gap:18px;padding:18px;max-width:1200px;margin:18px auto;}
+  @media(max-width:960px){ .wrap{grid-template-columns:1fr;padding-bottom:140px} }
+
+  .product-grid{display:grid;grid-template-columns: repeat(auto-fill,minmax(240px,1fr));gap:16px;}
+
+  .card{background:var(--card-bg);border-radius:12px;padding:12px;box-shadow: 0 6px 18px rgba(0,0,0,0.06);transition:transform .14s ease, box-shadow .14s ease;display:flex;flex-direction:column;gap:8px;overflow:visible;}
+  .card:hover{ transform:translateY(-6px); box-shadow: 0 14px 30px rgba(0,0,0,0.09); }
+
+  .imgwrap{width:100%;aspect-ratio: 4/3;border-radius:8px;overflow:hidden;background:linear-gradient(180deg,#f1f1f1,#e9e9e9);position:relative;display:flex;align-items:center;justify-content:center}
+  .imgwrap img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .35s ease, opacity .25s ease; }
+
+  /* slide fade container for smooth swap */
+  .img-stack{position:relative;width:100%;height:100%}
+  .img-stack img{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:translateX(8px);pointer-events:none}
+  .img-stack img.active{opacity:1;transform:translateX(0)}
+
+  h3{ margin:0; font-size:16px; font-weight:700; color:var(--text-dark) }
+  .meta{ font-size:13px; color:#444 }
+
+  .controls{ display:flex; gap:8px; margin-top:6px; align-items:center; }
+  .controls select, .controls input[type="number"]{ padding:8px; border-radius:8px; border:1px solid #ddd; flex:1; font-size:14px; }
+  .controls input[type="number"]{ width:100px; }
+
+  .btn-add{ background:var(--brand-red); color:#fff; border:none; padding:10px; border-radius:10px; cursor:pointer; font-weight:700; margin-top:8px; }
+  .btn-add:hover{ background:#d22626 }
+
+  /* color thumbnails */
+  .color-row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+  .color-thumb{width:40px;height:40px;border-radius:8px;overflow:hidden;border:2px solid transparent;cursor:pointer;box-shadow:0 4px 8px rgba(0,0,0,0.06)}
+  .color-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .color-thumb.selected{outline:3px solid rgba(0,0,0,0.06);border-color:var(--brand-yellow);transform:scale(1.05)}
+
+/* TAMBAHAN SOLD overlay */
+.color-thumb.sold-out {
+  position: relative;
+  cursor: not-allowed;
+}
+.color-thumb.sold-out img {
+  opacity: 0.4;
+  transition: none !important;
+}
+.color-thumb.sold-out::after {
+  content: "SOLD";
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+.color-thumb.sold-out:hover img {
+  opacity: 0.4;
+}
+  /* Cart panel */
+  .cart-panel{ background: linear-gradient(180deg,#fff,#fff7d6); border-radius:12px; padding:14px; box-shadow: var(--shadow); position:sticky; top:86px; height:calc(100vh - 130px); overflow:auto; }
+  .cart-panel h2{ margin:0 0 8px 0; font-size:18px }
+  .cart-item{ display:flex; gap:10px; align-items:center; padding:8px 6px; border-radius:8px; background:rgba(0,0,0,0.02); margin-bottom:8px; }
+  .cart-item img{ width:64px; height:48px; object-fit:cover; border-radius:6px; }
+  .cart-item .info{ flex:1; font-size:13px }
+  .cart-item .info b{ display:block; font-size:14px }
+  .cart-item .qty-controls{ display:flex; gap:6px; align-items:center }
+  .cart-item .qty-controls button{ background:#fff; border:1px solid #ddd; padding:6px 8px; border-radius:8px; cursor:pointer; }
+  .cart-item .remove{ background:transparent; border:none; color:#b22222; cursor:pointer; font-weight:700; }
+
+  .cart-footer{ position:sticky; bottom:0; background:linear-gradient(180deg,transparent,#fff7d6); padding-top:10px; }
+  .cart-total{ display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 0; font-weight:800 }
+  .btn-checkout{ width:100%; background:var(--brand-yellow); color:#003366; border:none; font-weight:800; padding:12px; border-radius:10px; cursor:pointer; box-shadow: 0 6px 14px rgba(0,0,0,0.08); font-size:16px; }
+  .btn-checkout:hover{ filter:brightness(.96) }
+
+  /* Mobile */
+  @media(max-width:960px){
+    .cart-panel{ display:none }
+    .mobile-cart-bar{ position:fixed; left:0; right:0; bottom:0; z-index:60; background:linear-gradient(90deg,var(--brand-yellow),var(--brand-red)); display:flex; justify-content:space-between; align-items:center; padding:10px 12px; color:#fff; gap:10px; box-shadow: 0 -6px 24px rgba(0,0,0,0.12); }
+    .mobile-cart-bar .open{ background:#fff; color:var(--text-dark); padding:8px 12px; border-radius:8px; font-weight:700 }
+    .bottom-sheet{ position:fixed; left:0; right:0; bottom:0; max-height:70vh; background:#fff; border-top-left-radius:16px; border-top-right-radius:16px; box-shadow:var(--shadow); transform:translateY(100%); transition:transform .25s ease; z-index:80; overflow:auto; padding:12px; }
+    .bottom-sheet.open{ transform:translateY(0) }
+  }
+
+  .muted{ color:#666; font-size:13px }
+  .small{ font-size:13px }
+  
+  /* Pastikan imgwrap boleh pegang elemen overlay/label */
+.card .imgwrap{ position: relative; }
+
+/* Badge promosi kecil di penjuru kiri atas gambar */
+.badge{
+  position:absolute; top:8px; left:8px;
+  background:#e11d48; color:#fff;
+  font-size:12px; font-weight:700;
+  padding:4px 8px; border-radius:6px;
+  box-shadow:0 2px 6px rgba(0,0,0,.2);
+  letter-spacing:.5px;
+}
+
+/* Chip promo (countdown) di penjuru bawah kiri gambar */
+.promo-chip{
+  position:absolute; bottom:8px; left:8px;
+  background:#111; color:#fff;
+  font-size:12px; font-weight:700;
+  padding:4px 10px; border-radius:9999px;
+  opacity:.92;
+}
+/* Badge promosi kecil di penjuru kiri atas gambar */
+.badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: #e11d48;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  letter-spacing: .5px;
+}
+.cart-header {
+  display: flex;
+  justify-content: center; /* letak tengah */
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+}
+
+.btn-toggle-cart {
+  width: 32px;
+  height: 32px;
+  background: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-panel.collapsed .btn-toggle-cart {
+  transform: rotate(180deg); /* Bila tutup, ikon terbalik */
+}
+
+.cart-panel.collapsed .cart-items,
+.cart-panel.collapsed .cart-footer {
+  display: none;
+}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="logo">
+    <!-- letak logo.png di folder sama atau tukar src -->
+    <img src="https://i.imgur.com/fhcnGux.png" alt="Logo Preloved Kids Boutique">
+  </div>
+  <div>
+    <h1>PRELOVED KIDS BOUTIQUE</h1>
+    <p class="small">Shopping App — Pilih warna untuk preview gambar, tambah ke cart & checkout via WhatsApp</p>
+  </div>
+</header>
+
+<div class="wrap">
+  <main>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h2 style="margin:0">Pilihan Kasut</h2>
+      <div class="muted">  SELAMAT DATANG KE PRELOVED KIDS BOUTIQUE SHOPPING APP </div>
+    </div>
+
+    <div class="product-grid" id="productGrid"></div>
+  </main>
+
+  <aside class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <button class="btn-toggle-cart" onclick="toggleCartPanel()" id="btnToggleCart">⬆</button>
+    <h2>Cart</h2>
+  </div>
+  <div id="cartItems" class="cart-items"></div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <div>Total</div>
+      <div id="totalPrice">RM 0</div>
+    </div>
+    <button class="btn-checkout" onclick="checkout()">Checkout via WhatsApp</button>
+  </div>
+</aside>
+</div>
+
+<!-- Mobile bar + sheet -->
+<div class="mobile-cart-bar" id="mobileCartBar" style="display:none">
+  <div>
+    <div id="mobileCount">0 item</div>
+    <div class="muted small" id="mobileTotal">RM 0</div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="open" onclick="toggleSheet()">Lihat Cart</button>
+    <button class="open" onclick="checkout()">Checkout</button>
+  </div>
+</div>
+
+<div class="bottom-sheet" id="bottomSheet" aria-hidden="true">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <h3>Cart</h3>
+    <button id="btnToggleSheet" onclick="toggleSheet()" 
+      style="background:#f5f5f5;border:none;padding:6px 10px;border-radius:6px;font-size:16px;cursor:pointer">
+      ⬇
+    </button>
+  </div>
+  <div id="mobileCartList"></div>
+  <div style="padding:12px 0">
+    <div class="cart-total">
+  <div>Total</div>
+  <div id="mobileTotalPrice">RM 0</div>
+</div>
+<div class="muted small" style="margin:6px 0 0">*HARGA TIDAK TERMASUK POSTAGE</div>
+<button class="btn-checkout" onclick="checkout()">Checkout via WhatsApp</button>
+  </div>
+</div>
+
+<script>
+/* ============= CONFIG =============
+ - adminNumber: nombor WhatsApp admin (format: 6012...)
+ - products: edit/ tambah produk di bawah. setiap warna ada img URL.
+=================================== */
+const adminNumber = "60172900078";
+let products = []; // kosong dulu, nanti kita fetch dari JSON
+let cart = [];
+
+/* ========== HELPERS ========== */
+function formatRM(n){ return "RM " + Number(n).toLocaleString('en-MY', {minimumFractionDigits:0, maximumFractionDigits:0}); }
+function findProduct(id){ return products.find(p => p.id === id); }
+
+/* ========== RENDER PRODUCTS ========== */
+function renderProducts(){
+  const grid = document.getElementById('productGrid');
+  grid.innerHTML = "";
+  products.forEach(p => {
+    const card = document.createElement('div');
+    card.className = "card";
+    // build color thumbnails html
+    const colorThumbs = p.colors.map((c, ci) => {
+      return `<div class="color-thumb" data-pid="${p.id}" data-color-index="${ci}" title="${c.name}">
+                <img src="${c.img}" alt="${c.name}">
+              </div>`;
+    }).join("");
+    // build size options
+    const firstColorStock = p.colors[0].stockPerSize || {};
+const sizeOptions = p.sizes.map(s => {
+  const stok = firstColorStock[s] !== undefined ? firstColorStock[s] : 1;
+  if (stok === 0) {
+    return `<option value="${s}" disabled>${s} (SOLD OUT)</option>`;
+  }
+  return `<option value="${s}">${s}</option>`;
+}).join("");
+    // build initial img stack (render all color images but only first active)
+    const imgStack = p.colors.map((c, ci) => {
+      const active = ci === 0 ? "active" : "";
+      return `<img src="${c.img}" data-pid="${p.id}" data-color-index="${ci}" class="${active}">`;
+    }).join("");
+
+    card.innerHTML = `
+      <div class="imgwrap">
+  <div class="img-stack">${imgStack}</div>
+  ${p.badge ? `<div class="badge">${p.badge}</div>` : ''}
+  ${p.promoEnd ? `<div class="promo-chip" data-promo-end="${p.promoEnd}"></div>` : ''}
+</div>
+      <h3>${p.name}</h3>
+      <div class="meta small">
+  Harga: ${formatRM(p.price)}<br>
+  <span style="font-size:11px;color:#b22222;font-weight:700">TIDAK TERMASUK POSTAGE</span>
+</div>
+
+      <div class="color-row">${colorThumbs}</div>
+
+      <div class="controls" style="margin-top:8px">
+        <select class="select-size" aria-label="Saiz">${sizeOptions}</select>
+        <input type="number" class="input-qty" min="1" value="1" aria-label="Kuantiti">
+      </div>
+
+      <button class="btn-add" onclick="handleAdd('${p.id}', this)">Tambah ke Cart</button>
+    `;
+    grid.appendChild(card);
+  });
+
+  // attach events for color hover & click
+  document.querySelectorAll('.color-thumb').forEach(thumb => {
+    // hover (desktop) => preview
+    thumb.addEventListener('mouseenter', (e) => {
+      if(window.matchMedia("(hover: hover)").matches){
+        const pid = thumb.dataset.pid;
+        const idx = Number(thumb.dataset.colorIndex);
+        previewColor(pid, idx);
+      }
+    });
+    // click/tap => select (persistent)
+    thumb.addEventListener('click', (e) => {
+      const pid = thumb.dataset.pid;
+      const idx = Number(thumb.dataset.colorIndex);
+      selectColor(pid, idx, thumb);
+    });
+  });
+
+  // Make first thumb selected by default
+  document.querySelectorAll('.color-row').forEach(row => {
+    const firstThumb = row.querySelector('.color-thumb');
+    if(firstThumb) firstThumb.classList.add('selected');
+  });
+}
+
+/* ========== PREVIEW & SELECT COLOR ========== */
+function previewColor(productId, colorIndex){
+  // find all img elements for product
+  document.querySelectorAll(`img[data-pid="${productId}"]`).forEach(img => {
+    img.classList.remove('active');
+    if(Number(img.dataset.colorIndex) === colorIndex){
+      img.classList.add('active');
+    }
+  });
+}
+
+function selectColor(productId, colorIndex, thumbElem){
+  // preview first
+  previewColor(productId, colorIndex);
+
+  // mark selected thumbnail
+  const thumbs = document.querySelectorAll(`.color-thumb[data-pid="${productId}"]`);
+  thumbs.forEach(t => t.classList.remove('selected'));
+  if(thumbElem) thumbElem.classList.add('selected');
+
+  // simpan index warna terpilih
+  const card = thumbElem.closest('.card');
+  if(card) {
+    card.dataset.selectedColorIndex = colorIndex;
+
+    // Update saiz ikut stok warna dipilih
+    const prod = findProduct(productId);
+    const colorStock = prod.colors[colorIndex].stockPerSize || {};
+    const sizeSelect = card.querySelector('.select-size');
+    sizeSelect.innerHTML = prod.sizes.map(s => {
+      const stok = colorStock[s] !== undefined ? colorStock[s] : 1;
+      if (stok === 0) {
+        return `<option value="${s}" disabled>${s} (SOLD OUT)</option>`;
+      }
+      return `<option value="${s}">${s}</option>`;
+    }).join("");
+  }
+}
+/* ========== CART FUNCTIONS ========== */
+function handleAdd(productId, btn){
+  const card = btn.closest('.card');
+  const size = card.querySelector('.select-size').value;
+  const qty = parseInt(card.querySelector('.input-qty').value) || 0;
+
+  // dapatkan product penuh
+  const prod = findProduct(productId);
+
+  // selected color index: either stored from click, or default 0
+  const selIndex = card.dataset.selectedColorIndex ? Number(card.dataset.selectedColorIndex) : 0;
+
+  // check stok ikut warna & saiz
+  const colorObj = prod.colors[selIndex] || prod.colors[0];
+  const stokSaiz = (colorObj.stockPerSize && colorObj.stockPerSize[size] !== undefined)
+    ? colorObj.stockPerSize[size]
+    : 1;
+  if (stokSaiz === 0) {
+    alert(`Maaf, saiz ${size} untuk ${prod.name} (${colorObj.name}) sudah habis.`);
+    return;
+  }
+
+  // unique cart line by product+color+size
+  const cartId = `${productId}__${colorObj.name}__${size}`;
+  const existing = cart.find(c => c.cartId === cartId);
+  if(existing){
+    existing.qty += qty;
+  } else {
+    cart.push({
+      cartId,
+      productId,
+      name: prod.name,
+      color: colorObj.name,
+      size,
+      qty,
+      image: colorObj.img,
+      price: prod.price
+    });
+  }
+  updateCartUI();
+
+  // feedback
+  btn.textContent = "Ditambah ✓";
+  setTimeout(()=> btn.textContent = "Tambah ke Cart", 900);
+}
+
+function updateCartUI(){
+  const container = document.getElementById('cartItems');
+  container.innerHTML = "";
+  let total = 0;
+  cart.forEach((item, idx) => {
+    total += item.price * item.qty;
+    const node = document.createElement('div');
+    node.className = "cart-item";
+    node.innerHTML = `
+      <img src="${item.image}" alt="${item.name}">
+      <div class="info">
+        <b>${item.name}</b>
+        <div class="small muted">${item.color} • Saiz ${item.size}</div>
+        <div class="small muted">
+  Harga seunit: ${formatRM(item.price)}<br>
+  <span style="font-size:11px;color:#b22222;font-weight:700">TIDAK TERMASUK POSTAGE</span>
+</div>
+
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+        <div class="qty-controls">
+          <button onclick="changeQty(${idx}, -1)">−</button>
+          <div style="padding:6px 8px;border-radius:6px;background:#fff;border:1px solid #eee">${item.qty}</div>
+          <button onclick="changeQty(${idx}, 1)">+</button>
+        </div>
+        <button class="remove" onclick="removeItem(${idx})">Buang</button>
+      </div>
+    `;
+    container.appendChild(node);
+  });
+
+  document.getElementById('totalPrice').textContent = formatRM(total);
+
+  // mobile UI
+  const mobileBar = document.getElementById('mobileCartBar');
+  const mobileCount = document.getElementById('mobileCount');
+  const mobileTotal = document.getElementById('mobileTotal');
+  const mobileList = document.getElementById('mobileCartList');
+  const mobileTotalPrice = document.getElementById('mobileTotalPrice');
+
+  mobileList.innerHTML = "";
+  let count = 0;
+  cart.forEach((item, idx) => {
+    count += item.qty;
+    mobileList.innerHTML += `
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0f0f0">
+        <img src="${item.image}" width="56" style="border-radius:6px">
+        <div style="flex:1">
+          <b>${item.name}</b>
+          <div class="small muted">${item.color} • Saiz ${item.size}</div>
+          <div class="small">Qty: ${item.qty} • ${formatRM(item.price*item.qty)}</div>
+        </div>
+        <div>
+          <button style="background:transparent;border:1px solid #eee;padding:6px;border-radius:8px" onclick="removeItem(${idx})">Buang</button>
+        </div>
+      </div>
+    `;
+  });
+
+  mobileCount.textContent = `${count} item`;
+  mobileTotal.textContent = formatRM(total);
+  mobileTotalPrice.textContent = formatRM(total);
+
+  if(count > 0){
+    mobileBar.style.display = "flex";
+  } else {
+    mobileBar.style.display = "none";
+    document.getElementById('bottomSheet').classList.remove('open');
+  }
+}
+
+function changeQty(index, delta){
+  cart[index].qty += delta;
+  if(cart[index].qty <= 0) cart[index].qty = 1;
+  updateCartUI();
+}
+
+function removeItem(index){
+  if(!confirm("Buang item ini dari cart?")) return;
+  cart.splice(index,1);
+  updateCartUI();
+}
+
+/* CHECKOUT */
+function checkout(){
+  if(cart.length === 0){ alert("Cart kosong!"); return; }
+  let msg = "Hi Admin, saya nak order:\n\n";
+  let grandTotal = 0;
+  cart.forEach((it, i) => {
+    const lineTotal = it.price * it.qty;
+    grandTotal += lineTotal;
+    msg += `${i+1}. ${it.name}\n   - Warna: ${it.color}\n   - Saiz: ${it.size}\n   - Kuantiti: ${it.qty}\n   - Harga seunit: RM ${it.price}\n   - Jumlah: RM ${lineTotal}\n   - Gambar: ${it.image}\n\n`;
+  });
+  msg += `Total: RM ${grandTotal}\n\nSila confirm stok & cara pembayaran. Terima kasih!`;
+  const encoded = encodeURIComponent(msg);
+  const url = `https://wa.me/${adminNumber}?text=${encoded}`;
+  window.open(url, "_blank");
+}
+function toggleCartPanel(){
+  const panel = document.getElementById('cartPanel');
+  const btn = document.getElementById('btnToggleCart');
+  panel.classList.toggle('collapsed');
+
+  // Tukar ikon ikut status
+  if(panel.classList.contains('collapsed')){
+    btn.textContent = '⬇'; // Tutup → tunjuk panah bawah
+  } else {
+    btn.textContent = '⬆'; // Buka → tunjuk panah atas
+  }
+}
+
+/* Mobile sheet toggle */
+function toggleSheet(){
+  const sheet = document.getElementById('bottomSheet');
+  const btn = document.getElementById('btnToggleSheet');
+  sheet.classList.toggle('open');
+
+  if(sheet.classList.contains('open')){
+    btn.textContent = '⬇'; // Buka → tunjuk panah bawah untuk tutup
+  } else {
+    btn.textContent = '⬆'; // Tutup → tunjuk panah atas untuk buka
+  }
+}
+
+// Ambil data dari products.json
+fetch('products.json?_=' + Date.now())
+  .then(r => r.json())
+  .then(data => {
+    products = data;
+    renderProducts();
+    updateCartUI();
+  })
+  .catch(err => {
+    console.error('Gagal load products.json', err);
+    document.getElementById('productGrid').innerHTML =
+      '<div style="padding:16px">Gagal muat produk. Sila cuba lagi.</div>';
+  });
+</script>
+
+<footer style="background:#fff; border-top:1px solid #eee; padding:16px; margin-top:40px; font-size:13px; color:#555; text-align:center; font-family: 'Roboto', Arial, sans-serif;">
+  <div style="margin-bottom:8px; font-weight:700">PRELOVED KIDS BOUTIQUE</div>
+  <div style="max-width:600px; margin:0 auto; line-height:1.5">
+    Kasut preloved & baru — pilihan khas untuk anda ❤️<br>
+    Harga tidak termasuk postage. Stok tertakluk pada ketersediaan.
+  </div>
+  <div style="margin-top:10px">
+    📞 <a href="https://wa.me/60179267349" style="color:#e11d48; text-decoration:none">WhatsApp Admin</a><br>
+     <a href="https://www.tiktok.com/@pkbgroup5?_t=ZS-8yruVxHptYN&_r=1" target="_blank" style="background: linear-gradient(90deg, #3CB4E5, #8A2BE2); 
+          -webkit-background-clip: text; 
+          -webkit-text-fill-color: transparent; 
+          font-weight:600; 
+          text-decoration:none;"></a><i class="fab fa-tiktok"></i>
+   TikTok
+</a>
+  </div>
+  <div style="margin-top:10px; font-size:12px; color:#777">
+    © 2025 Preloved Kids Boutique — All rights reserved.
+  </div>
+</footer>
+
+</body>
+</html>
+</body>
+</html>
