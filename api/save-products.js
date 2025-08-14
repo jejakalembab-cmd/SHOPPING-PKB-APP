@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   // ================================
 
   // Token rahsia disimpan di Vercel → Settings → Environment Variables → GH_TOKEN
-  const token = process.env.GH_TOKEN;
+  const token = process.env.GH_TOKEN;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
   if (!token) {
     return res.status(500).json({ success:false, message:'GH_TOKEN not set in environment' });
   }
@@ -60,4 +60,4 @@ export default async function handler(req, res) {
   } catch (e) {
     return res.status(500).json({ success:false, message: e.message });
   }
-}
+            }
