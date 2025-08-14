@@ -5,7 +5,7 @@ export default async function handler(req, res) {
 
   // ====== SETTING REPO ANDA ======
   const GH_OWNER  = 'jejakalembab-cmd';   // contoh: "jejakalembab-cmd"
-  const GH_REPO   = 'SHOPPING_PKB_APP';         // contoh: "SHOPPING-PKB-APP"
+  const GH_REPO   = 'SHOPPING-PKB-APP';         // contoh: "SHOPPING-PKB-APP"
   const GH_BRANCH = 'main';
   const FILE_PATH = 'products.json';
   // ================================
